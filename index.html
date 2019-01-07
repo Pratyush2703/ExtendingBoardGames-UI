@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <script src="js/chessboard-0.3.0.js">
+    </script>
+    <link href="css/chessboard-0.3.0.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js">
+    </script>
+    <title></title>
+  </head>
+  <body>
+    <div id="board2" style="width: 400px"></div>
+    <form>
+      <input id="startBtn" type="button" value="Start"> <input id="clearBtn" type="button" value="Clear"> <input id="setRookCheckmateBtn" type="button" value="API Call"> 
+      <script type="text/javascript">
+        var form = new FormData();
+        form.append("gameid", "TD123");
+        form.append("move_number", "12");
+
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "http://127.0.0.1:5000/digitize_board",
+            "method": "POST",
+            "headers": {
+                "cache-control": "no-cache",
+                "Postman-Token": "6dea9856-8342-40a7-b710-94a11357db1f"
+            },
+            "processData": false,
+            "contentType": false,
+            "mimeType": "multipart/form-data",
+            "data": form
+        }
+
+        $.ajax(settings).done(function(response) {
+            response = JSON.parse(response);
+            console.log(JSON.stringify(response.board[0]));
+
+            var cfg = {
+                position: response.board[0]
+            };
+            console.log(JSON.stringify(cfg, false));
+
+            var board2 = ChessBoard('board2', {
+                draggable: true,
+                dropOffBoard: 'trash',
+                sparePieces: true
+            });
+
+            $('#startBtn').on('click', board2.start);
+            $('#clearBtn').on('click', board2.clear);
+            $('#setRookCheckmateBtn').on('click', function() {
+
+                board2.position(response.board[0])
+            });
+
+        });
+      </script> 
+    </form>
+  </body>
+</html>
