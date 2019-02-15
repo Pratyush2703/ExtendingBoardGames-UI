@@ -41,31 +41,29 @@ function setanchors(){
 
 function posttoapi(){
     
-    var fs = require("fs");
-var request = require("request");
+var form = new FormData();
+form.append("image", "D:\\Desktop\\cropped.png");
+form.append("gameid", "TD125");
+form.append("move_number", "2");
 
-var options = { method: 'POST',
-  url: 'http://127.0.0.1:5000/segment_board',
-  headers: 
-   { 'Postman-Token': '6dfecd39-908e-49e3-8891-e43121fc049e',
-     'cache-control': 'no-cache',
-     'content-type': 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' },
-  formData: 
-   { image: 
-      { value: document.getElementById("canvas1").toDataURL("image/png").replace("image/png", "image/octet-stream"),
-        options: { filename: 'cropped.png', contentType: null } } } };
-
-request(options, function (error, response, body) {
-  if (error) throw new Error(error);
-
-  console.log(body);
-});
-    
-    var image = document.getElementById("canvas1").toDataURL("image/png").replace("image/png", "image/octet-stream");  // here is the most important part because if you dont replace you will get a DOM 18 exception.
-
-
-window.location.href=image;
+var settings = {
+  "async": true,
+  "crossDomain": true,
+  "url": "http://127.0.0.1:5000/digitize_board",
+  "method": "POST",
+  "headers": {
+    "cache-control": "no-cache",
+    "Postman-Token": "1045baa8-a903-45b1-b985-9c15464ceeb9"
+  },
+  "processData": false,
+  "contentType": false,
+  "mimeType": "multipart/form-data",
+  "data": form
 }
+
+$.ajax(settings).done(function (response) {
+  document.getElementById("body").innerHTML=body;
+});}
 
 function unwarp(anchors,unwarped,context){
 
