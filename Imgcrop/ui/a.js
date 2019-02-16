@@ -27,45 +27,31 @@ function start(){
 
 function go(){
     
-     unwarp(anchors,unwarped,ctx1);
+    setanchors();
+    unwarp(anchors,unwarped,ctx1);
+    
 }
 
 function setanchors(){
-    
-         if (document.getElementById("tl").checked) {anchors.TL.x = document.getElementById("TL_x").value;anchors.TL.y = document.getElementById("TL_x").value;}
-    else if (document.getElementById("tr").checked) {anchors.TR.x = document.getElementById("TR_x").value;anchors.TR.y = document.getElementById("TR_x").value;}
-    else if (document.getElementById("br").checked) {anchors.BR.x = document.getElementById("BR_x").value;anchors.BR.y = document.getElementById("BR_x").value;}
-    else if (document.getElementById("bl").checked) {anchors.BL.x = document.getElementById("BL_x").value;anchors.BL.y = document.getElementById("BL_x").value;}
-
+     
+    anchors.TL.x = document.getElementById("TL_x").value;
+    anchors.TL.y = document.getElementById("TL_y").value;
+    anchors.TR.x = document.getElementById("TR_x").value;
+    anchors.TR.y = document.getElementById("TR_y").value;
+    anchors.BR.x = document.getElementById("BR_x").value;
+    anchors.BR.y = document.getElementById("BR_y").value;
+    anchors.BL.x = document.getElementById("BL_x").value;
+    anchors.BL.y = document.getElementById("BL_y").value;
+    console.log(anchors);
+ 
 }
 
 function posttoapi(){
     
-var form = new FormData();
-form.append("image", "D:\\Desktop\\cropped.png");
-form.append("gameid", "TD125");
-form.append("move_number", "2");
-
-var settings = {
-  "async": true,
-  "crossDomain": true,
-  "url": "http://127.0.0.1:5000/digitize_board",
-  "method": "POST",
-  "headers": {
-    "cache-control": "no-cache",
-    "Postman-Token": "1045baa8-a903-45b1-b985-9c15464ceeb9"
-  },
-  "processData": false,
-  "contentType": false,
-  "mimeType": "multipart/form-data",
-  "data": form
-}
-
-$.ajax(settings).done(function (response) {
-  document.getElementById("body").innerHTML=body;
-});}
+console.log("In development")}
 
 function unwarp(anchors,unwarped,context){
+    console.log(anchors);
 
   context.clearRect(0,0,context.canvas.width,context.canvas.height);
   mapTriangle(context,
