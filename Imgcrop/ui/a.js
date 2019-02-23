@@ -21,7 +21,7 @@ img.src="./A.jpeg";
 function start(){
   cw=canvas.width=img.width;
   ch=canvas.height=img.height;
-  ctx.drawImage(img,0,0,img.width,img.height,0,0,900,900);
+  ctx.drawImage(img,0,0,img.width,img.height);
  
 }
 
