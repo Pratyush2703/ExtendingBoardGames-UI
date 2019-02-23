@@ -15,6 +15,14 @@ var unwarped={
   BL:{x:0,y:900},     
 }
 
+var cfg = {
+  position: 'start',
+    draggable: true,
+  dropOffBoard: 'trash',
+  sparePieces: true
+};
+
+//var board = ChessBoard('board', cfg);
 var img=new Image();
 img.onload=start;
 img.src="./A.jpeg";
