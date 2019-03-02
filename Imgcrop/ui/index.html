@@ -25,17 +25,24 @@
   sparePieces: true
 };
         
-            
-        
+           
         $(document).ready(function() { 
             // bind 'myForm' and provide a simple callback function 
             var board = ChessBoard('board',cfg);
+            
+            document.getElementById("gk").value = Math.random().toString(36).substring(2, 5) + Math.random().toString(36).substring(2, 5);
+            
             $('#myForm').ajaxForm({
+                url: "http://127.0.0.1:5000/digitize_board",
+                
+                
         success : function (response) {
+            
+            alert("The server says: " + JSON.stringify(response));
             var x = response.board;
             
             
-            alert("The server says: " + JSON.stringify(cfg));
+            alert("The server says: " + JSON.stringify(response));
             board.position(x[0]);
             console.log(board.fen());
             
@@ -51,16 +58,19 @@
 
     <br>
     <div>
-        <form action="http://127.0.0.1:5000/digitize_board" method="post" enctype="multipart/form-data" id="myForm">
+        <form method="post" enctype="multipart/form-data" id="myForm">
 
-            <input type="file" name="image">
-            <input type="text" name="gameid" placeholder="9">
+            <!--<input type="file" name="image" id="cimg"> -->
+            <input name="image" id="cimg" hidden>
+            <input type="text" name="gameid" value = ""; id = "gk">
             <input type="text" name="move_number" value="0">
             <input type="submit">
         </form>
     </div>
     <br>
-    <div hidden>
+    <div>
+        
+        
         <div>
             <input type="radio" name="gender" value="TL" id="tl">
             <label id="_TL"> TL </label> &emsp;

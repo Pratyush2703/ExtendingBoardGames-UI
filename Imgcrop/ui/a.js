@@ -56,7 +56,12 @@ function setanchors(){
 
 function posttoapi(){
     
-console.log("In development")}
+console.log("In development")
+    
+    
+    document.getElementById("cimg").value = canvas1.toDataURL();
+}
+//document.getElementById("cimg").files.replaceWith(canvas1.toDataURL());
 
 function unwarp(anchors,unwarped,context){
     console.log(anchors);
