@@ -21,17 +21,32 @@ var cfg = {
   dropOffBoard: 'trash',
   sparePieces: true
 };
-
-//var board = ChessBoard('board', cfg);
-var img=new Image();
-img.onload=start;
-img.src="./A.jpeg";
+var img = new Image;
 function start(){
   cw=canvas.width=img.width;
   ch=canvas.height=img.height;
   ctx.drawImage(img,0,0,img.width/2,img.height/2);
  
 }
+
+$('#loader').change(function(e) {
+
+    for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
+        
+        var file = e.originalEvent.srcElement.files[i];
+        
+        
+        var reader = new FileReader();
+        reader.onloadend = function() {
+             img.src = reader.result;
+            img.onload=start;
+        }
+        reader.readAsDataURL(file);
+    }
+});
+
+
+
 
 function go(){
     

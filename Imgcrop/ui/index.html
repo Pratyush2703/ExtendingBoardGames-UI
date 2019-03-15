@@ -83,7 +83,7 @@
             var x = response.board;
             
             
-            alert("The server says: " + JSON.stringify(response));
+           // alert("The server says: " + JSON.stringify(response));
             board.position(x[0]);
             console.log(board.fen());
             
@@ -149,6 +149,7 @@ client.connect(options);
         
         
         <div>
+            <input type="file" id="loader"><br><br>
             <input type="radio" name="gender" value="TL" id="tl">
             <label id="_TL"> TL </label> &emsp;
             <input type="text" id="TL_x" value="0">
@@ -174,11 +175,7 @@ client.connect(options);
             <br>
             <br>
             <button onclick="go()">Go</button>
-            <br>
-            <br>
-            <button onclick="posttoapi()" hidden>Post</button>
-            <br>
-            <br>
+            
         </div>
 
         <canvas id="canvas" width=900 height=900></canvas>
