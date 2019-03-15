@@ -73,22 +73,7 @@
             document.getElementById("fens").value=board.fen();
             document.getElementById("gk").value = Math.random().toString(36).substring(2, 5) + Math.random().toString(36).substring(2, 5);
             
-            $('#myForm').ajaxForm({
-                url: "http://127.0.0.1:5000/digitize_board",
-                
-                
-        success : function (response) {
-            
-            alert("The server says: " + JSON.stringify(response));
-            var x = response.board;
-            
-            
-            alert("The server says: " + JSON.stringify(response));
-            board.position(x[0]);
-            console.log(board.fen());
-            
-        }
-    }); 
+          
         }); 
         
         function setboard()
@@ -122,18 +107,10 @@ client.connect(options);
 </head>
 
 <body id="body">
-    <div class="split right">
     <div id="board" style="width: 400px"></div>
 
     <br>
     <div>
-        <form method="post" enctype="multipart/form-data" id="myForm">
-
-            <input type="file" name="image" id="cimg">
-            <input type="text" name="gameid" value = ""; id = "gk">
-            <input type="text" name="move_number" value="0">
-            <input type="submit">
-        </form>
         <input hidden id="fens" type="text">
         <button hidden onclick="client.connect(options);">1. Connect</button>
 <button onclick="client.subscribe('fen', {qos: 2}); alert('Game Started');">Start Game</button>
@@ -141,100 +118,7 @@ client.connect(options);
 <button hidden onclick="setboard()">(4. Disconnect)</button>
 <div id="messages"></div>
     </div>
-    </div><br><br>
-    <p>.....</p>
-    <div class="split left">
-    <br>
-    <div>
-        
-        
-        <div>
-            <input type="radio" name="gender" value="TL" id="tl">
-            <label id="_TL"> TL </label> &emsp;
-            <input type="text" id="TL_x" value="0">
-            <input type="text" id="TL_y" value="0">
-            <br>
-            <br>
-            <input type="radio" name="gender" value="TR" id="tr">
-            <label id="_TR"> TR </label> &emsp;
-            <input type="text" id="TR_x" value="0">
-            <input type="text" id="TR_y" value="0">
-            <br>
-            <br>
-            <input type="radio" name="gender" value="BL" id="bl">
-            <label id="_BL"> BL </label> &emsp;
-            <input type="text" id="BL_x" value="0">
-            <input type="text" id="BL_y" value="0">
-            <br>
-            <br>
-            <input type="radio" name="gender" value="BR" id="br">
-            <label id="_BR"> BR </label> &emsp;
-            <input type="text" id="BR_x" value="0">
-            <input type="text" id="BR_y" value="0">
-            <br>
-            <br>
-            <button onclick="go()">Go</button>
-            <br>
-            <br>
-            <button onclick="posttoapi()" hidden>Post</button>
-            <br>
-            <br>
-        </div>
-
-        <canvas id="canvas" width=900 height=900></canvas>
-        <canvas id="canvas1" width=900 height=900></canvas>
-        <br>
-
-    </div>
-    </div>
-    <script src="a.js" async defer></script>
-    <script type="text/javascript" defer>
-        document.addEventListener("DOMContentLoaded", init, false);
-
-        function init() {
-            var canvas = document.getElementById("canvas");
-            canvas.addEventListener("mousedown", getPosition, false);
-        }
-
-        function getPosition(event) {
-            var x = new Number();
-            var y = new Number();
-            var canvas = document.getElementById("canvas");
-
-            if (event.x != undefined && event.y != undefined) {
-                x = event.x;
-                y = event.y;
-            } else // Firefox method to get the position
-            {
-                x = event.clientX + document.body.scrollLeft +
-                    document.documentElement.scrollLeft;
-                y = event.clientY + document.body.scrollTop +
-                    document.documentElement.scrollTop;
-            }
-
-            x -= canvas.offsetLeft;
-            y -= canvas.offsetTop;
-
-            x = x - window.pageXOffset;
-            y = y + window.pageYOffset;
-
-            //alert("x: " + x + "  y: " + y);
-            if (document.getElementById("tl").checked) {
-                document.getElementById("TL_x").value = x;
-                document.getElementById("TL_y").value = y;
-            } else if (document.getElementById("tr").checked) {
-                document.getElementById("TR_x").value = x;
-                document.getElementById("TR_y").value = y;
-            } else if (document.getElementById("bl").checked) {
-                document.getElementById("BL_x").value = x;
-                document.getElementById("BL_y").value = y;
-            } else if (document.getElementById("br").checked) {
-                document.getElementById("BR_x").value = x;
-                document.getElementById("BR_y").value = y;
-            }
-            // setanchors();
-        }
-    </script>
+    
 </body>
 
 </html>
