@@ -29,7 +29,7 @@ img.src="./A.jpeg";
 function start(){
   cw=canvas.width=img.width;
   ch=canvas.height=img.height;
-  ctx.drawImage(img,0,0,img.width,img.height);
+  ctx.drawImage(img,0,0,img.width/2,img.height/2);
  
 }
 
@@ -42,14 +42,14 @@ function go(){
 
 function setanchors(){
      
-    anchors.TL.x = document.getElementById("TL_x").value;
-    anchors.TL.y = document.getElementById("TL_y").value;
-    anchors.TR.x = document.getElementById("TR_x").value;
-    anchors.TR.y = document.getElementById("TR_y").value;
-    anchors.BR.x = document.getElementById("BR_x").value;
-    anchors.BR.y = document.getElementById("BR_y").value;
-    anchors.BL.x = document.getElementById("BL_x").value;
-    anchors.BL.y = document.getElementById("BL_y").value;
+    anchors.TL.x = document.getElementById("TL_x").value*2;
+    anchors.TL.y = document.getElementById("TL_y").value*2;
+    anchors.TR.x = document.getElementById("TR_x").value*2;
+    anchors.TR.y = document.getElementById("TR_y").value*2;
+    anchors.BR.x = document.getElementById("BR_x").value*2;
+    anchors.BR.y = document.getElementById("BR_y").value*2;
+    anchors.BL.x = document.getElementById("BL_x").value*2;
+    anchors.BL.y = document.getElementById("BL_y").value*2;
     console.log(anchors);
  
 }

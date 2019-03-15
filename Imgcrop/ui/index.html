@@ -9,6 +9,45 @@
         canvas {
             border: 0px solid red;
         }
+        
+        .split {
+  height: 100%;
+ 
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+/* Control the left side */
+.left {
+  left: 0;
+     width: 70%;
+  background-color: gray;
+}
+
+/* Control the right side */
+.right {
+  right: 0;
+     width: 30%;
+  background-color: red;
+}
+
+/* If you want the content centered horizontally and vertically */
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+/* Style the image inside the centered container, if needed */
+.centered img {
+  width: 150px;
+  border-radius: 50%;
+}
     </style>
     <link href="chessboardjs-0.3.0/css/chessboard-0.3.0.css" rel="stylesheet">
     <script src="chessboardjs-0.3.0/js/chessboard-0.3.0.js"></script>
@@ -53,20 +92,22 @@
 </head>
 
 <body id="body">
-    
+    <div class="split right">
     <div id="board" style="width: 400px"></div>
 
     <br>
     <div>
         <form method="post" enctype="multipart/form-data" id="myForm">
 
-            <!--<input type="file" name="image" id="cimg"> -->
-            <input name="image" id="cimg" hidden>
+            <input type="file" name="image" id="cimg">
             <input type="text" name="gameid" value = ""; id = "gk">
             <input type="text" name="move_number" value="0">
             <input type="submit">
         </form>
     </div>
+    </div><br><br>
+    <p>.....</p>
+    <div class="split left">
     <br>
     <div>
         
@@ -109,7 +150,7 @@
         <br>
 
     </div>
-
+    </div>
     <script src="a.js" async defer></script>
     <script type="text/javascript" defer>
         document.addEventListener("DOMContentLoaded", init, false);
