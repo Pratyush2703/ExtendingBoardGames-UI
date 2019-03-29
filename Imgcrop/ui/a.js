@@ -55,6 +55,7 @@ function go(){
     
 }
 
+
 function setanchors(){
      
     anchors.TL.x = document.getElementById("TL_x").value*2;

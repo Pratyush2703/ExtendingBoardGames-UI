@@ -105,7 +105,7 @@
     <script type="application/javascript">
     var client = new Messaging.Client("127.0.0.1", 9001, "myclientid_" + parseInt(Math.random() * 100, 10));
 client.onConnectionLost = function (responseObject) {alert("connection lost: " + responseObject.errorMessage);};
-client.onMessageArrived = function (message) {document.getElementById("messages").innerHTML=message.payloadString; setboard();};
+client.onMessageArrived = function (message) {window.alert("A move has been played"); document.getElementById("messages").innerHTML=message.payloadString; setboard();};
  var options = {
      timeout: 3,
      //onSuccess: function () {alert("Connected");},
@@ -149,13 +149,16 @@ client.connect(options);
         
         
         <div>
-            <input type="file" id="loader"><br><br>
+            <input type="file" id="loader">
+            <input type="button" value="Live" onclick="initx()">
+            <br><br>
+            
             <input type="radio" name="gender" value="TL" id="tl">
             <label id="_TL"> TL </label> &emsp;
             <input type="text" id="TL_x" value="0">
             <input type="text" id="TL_y" value="0">
-            <br>
-            <br>
+            
+
             <input type="radio" name="gender" value="TR" id="tr">
             <label id="_TR"> TR </label> &emsp;
             <input type="text" id="TR_x" value="0">
@@ -166,8 +169,6 @@ client.connect(options);
             <label id="_BL"> BL </label> &emsp;
             <input type="text" id="BL_x" value="0">
             <input type="text" id="BL_y" value="0">
-            <br>
-            <br>
             <input type="radio" name="gender" value="BR" id="br">
             <label id="_BR"> BR </label> &emsp;
             <input type="text" id="BR_x" value="0">
@@ -175,10 +176,13 @@ client.connect(options);
             <br>
             <br>
             <button onclick="go()">Go</button>
+            <div class="controller">
+    <button id="snap">Capture</button><button onclick="go2()">Go Live</button>
+</div>
             
         </div>
-
-        <canvas id="canvas" width=900 height=900></canvas>
+        <video id="video" playsinline autoplay ></video>
+        <canvas id="canvas" width=900 height=900 style="margin: 20px"></canvas>
         <canvas id="canvas1" width=900 height=900></canvas>
         <br>
 
@@ -231,6 +235,54 @@ client.connect(options);
             }
             // setanchors();
         }
+    </script>
+    
+     <script type="text/javascript" async defer>
+    'use strict';
+
+const video = document.getElementById('video');
+const canvas2 = document.getElementById('canvas');
+const snap = document.getElementById("snap");
+const errorMsgElement = document.querySelector('span#errorMsg');
+var context = canvas2.getContext('2d');
+const constraints = {
+  audio: false,
+  video: {
+    width: 450, height: 450
+  }
+};
+
+// Access webcam
+async function initx() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    handleSuccess(stream);
+  } catch (e) {
+    errorMsgElement.innerHTML = `navigator.getUserMedia error:${e.toString()}`;
+  }
+}
+
+// Success
+function handleSuccess(stream) {
+  window.stream = stream;
+  video.srcObject = stream;
+}
+
+// Load init
+
+function go2(){
+    
+    setanchors();
+    unwarp(anchors,unwarped,context);
+    
+}
+// Draw image
+
+snap.addEventListener("click", function() {
+    
+	context.drawImage(video, 0, 0, 450, 450);
+    video.style.display = 'none';
+});
     </script>
 </body>
 

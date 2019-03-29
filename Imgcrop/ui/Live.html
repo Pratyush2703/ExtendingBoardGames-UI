@@ -1,0 +1,63 @@
+<html><head>
+    
+    
+    </head><body onload="init()"><div class="video-wrap">
+    <video id="video" playsinline autoplay></video>
+</div>
+
+<!-- Trigger canvas web API -->
+<div class="controller">
+    <button id="snap">Capture</button>
+</div>
+
+<!-- Webcam video snapshot -->
+<canvas id="canvas" width="640" height="480"></canvas>
+    
+    
+    
+    
+    <script type="text/javascript" async defer>
+    'use strict';
+
+const video = document.getElementById('video');
+const canvas = document.getElementById('canvas');
+const snap = document.getElementById("snap");
+const errorMsgElement = document.querySelector('span#errorMsg');
+
+const constraints = {
+  audio: false,
+  video: {
+    width: 450, height: 450
+  }
+};
+
+// Access webcam
+async function init() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    handleSuccess(stream);
+  } catch (e) {
+    errorMsgElement.innerHTML = `navigator.getUserMedia error:${e.toString()}`;
+  }
+}
+
+// Success
+function handleSuccess(stream) {
+  window.stream = stream;
+  video.srcObject = stream;
+}
+
+// Load init
+
+
+// Draw image
+
+snap.addEventListener("click", function() {
+    var context = canvas.getContext('2d');
+	context.drawImage(video, 0, 0, 450, 450);
+    video.style.display = 'none';
+});
+    </script>
+    
+    
+    </body></html>
