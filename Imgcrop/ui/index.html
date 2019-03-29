@@ -11,182 +11,194 @@
         }
         
         .split {
-  height: 100%;
- 
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  overflow-x: hidden;
-  padding-top: 20px;
-}
-
-/* Control the left side */
-.left {
-  left: 0;
-     width: 70%;
-  background-color: gray;
-}
-
-/* Control the right side */
-.right {
-  right: 0;
-     width: 30%;
-  background-color: red;
-}
-
-/* If you want the content centered horizontally and vertically */
-.centered {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-}
-
-/* Style the image inside the centered container, if needed */
-.centered img {
-  width: 150px;
-  border-radius: 50%;
-}
+            height: 100%;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            overflow-x: hidden;
+            padding-top: 20px;
+        }
+        /* Control the left side */
+        
+        .left {
+            left: 0;
+            width: 70%;
+            background-color: lightblue;
+        }
+        /* Control the right side */
+        
+        .right {
+            right: 0;
+            width: 30%;
+            background-color: goldenrod;
+        }
+        /* If you want the content centered horizontally and vertically */
+        
+        .centered {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        /* Style the image inside the centered container, if needed */
+        
+        .centered img {
+            width: 150px;
+            border-radius: 50%;
+        }
     </style>
     <link href="chessboardjs-0.3.0/css/chessboard-0.3.0.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
     <script src="chessboardjs-0.3.0/js/chessboard-0.3.0.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
     <script src="http://malsup.github.com/jquery.form.js"></script>
     <script src="mqtt.js"></script>
-    <script> 
+    <script>
         // wait for the DOM to be loaded 
         var board;
         var cfg = {
-  position: 'start',
-    draggable: true,
-  dropOffBoard: 'trash',
-  sparePieces: true
-};
-        
-           
-        $(document).ready(function() { 
+            position: 'start',
+            draggable: true,
+            dropOffBoard: 'trash',
+            sparePieces: true
+        };
+
+        $(document).ready(function() {
             // bind 'myForm' and provide a simple callback function 
-            board = ChessBoard('board',cfg);
-            document.getElementById("fens").value=board.fen();
+            board = ChessBoard('board', cfg);
+            document.getElementById("fens").value = board.fen();
             document.getElementById("gk").value = Math.random().toString(36).substring(2, 5) + Math.random().toString(36).substring(2, 5);
-            
+
             $('#myForm').ajaxForm({
                 url: "http://127.0.0.1:5000/digitize_board",
-                
-                
-        success : function (response) {
-            
-            alert("The server says: " + JSON.stringify(response));
-            var x = response.board;
-            
-            
-           // alert("The server says: " + JSON.stringify(response));
-            board.position(x[0]);
-            console.log(board.fen());
-            
-        }
-    }); 
-        }); 
-        
-        function setboard()
-        {
+
+                success: function(response) {
+
+                    alert("The server says: " + JSON.stringify(response));
+                    var x = response.board;
+
+                    // alert("The server says: " + JSON.stringify(response));
+                    board.position(x[0]);
+                    console.log(board.fen());
+
+                }
+            });
+        });
+
+        function setboard() {
             board.position(document.getElementById("messages").innerHTML);
         }
-        function getboard()
-        {
-            
-            document.getElementById("messages").innerHTML=board.fen();
+
+        function getboard() {
+
+            document.getElementById("messages").innerHTML = board.fen();
+            document.getElementById("pos").innerHTML = JSON.stringify(board.position());
         }
-    </script> 
-    
+    </script>
+
     <script type="application/javascript">
-    var client = new Messaging.Client("127.0.0.1", 9001, "myclientid_" + parseInt(Math.random() * 100, 10));
-client.onConnectionLost = function (responseObject) {alert("connection lost: " + responseObject.errorMessage);};
-client.onMessageArrived = function (message) {window.alert("A move has been played"); document.getElementById("messages").innerHTML=message.payloadString; setboard();};
- var options = {
-     timeout: 3,
-     //onSuccess: function () {alert("Connected");},
-     onFailure: function (message) {alert("Connection failed: " + message.errorMessage);}};
-var publish = function (topic, qos) {
-    payload = document.getElementById("messages").innerHTML;
-     var message = new Messaging.Message(payload);
-     message.destinationName = topic;
-     message.qos = qos;
-     client.send(message);}
-client.connect(options);
-        client.subscribe('fen', {qos: 2}); alert('Subscribed');
+        var client = new Messaging.Client("127.0.0.1", 9001, "myclientid_" + parseInt(Math.random() * 100, 10));
+        client.onConnectionLost = function(responseObject) {
+            alert("connection lost: " + responseObject.errorMessage);
+        };
+        client.onMessageArrived = function(message) {
+            window.alert("A move has been played");
+            document.getElementById("messages").innerHTML = message.payloadString;
+            setboard();
+        };
+        var options = {
+            timeout: 3,
+            //onSuccess: function () {alert("Connected");},
+            onFailure: function(message) {
+                alert("Connection failed: " + message.errorMessage);
+            }
+        };
+        var publish = function(topic, qos) {
+            payload = document.getElementById("messages").innerHTML;
+            var message = new Messaging.Message(payload);
+            message.destinationName = topic;
+            message.qos = qos;
+            client.send(message);
+        }
+        client.connect(options);
+        client.subscribe('fen', {
+            qos: 2
+        });
+        alert('Subscribed');
     </script>
 </head>
 
 <body id="body">
     <div class="split right">
-    <div id="board" style="width: 400px"></div>
+        <div id="board" style="width: 400px"></div>
 
-    <br>
-    <div>
-        <form method="post" enctype="multipart/form-data" id="myForm">
+        <br>
+        <div>
+            <form method="post" enctype="multipart/form-data" id="myForm">
 
-            <input type="file" name="image" id="cimg">
-            <input type="text" name="gameid" value = ""; id = "gk">
-            <input type="text" name="move_number" value="0">
-            <input type="submit">
-        </form>
-        <input hidden id="fens" type="text">
-        <button hidden onclick="client.connect(options);">1. Connect</button>
-<button onclick="client.subscribe('fen', {qos: 2}); alert('Game Started');">Start Game</button>
-<button onclick="getboard(); publish('fen',2);">Send Move</button>
-<button hidden onclick="setboard()">(4. Disconnect)</button>
-<div id="messages"></div>
+                <input type="file" name="image" id="cimg">
+                <input type="text" name="gameid" value="" ; id="gk">
+                <input type="text" name="move_number" value="0" id="mn">
+                <input type="submit">
+            </form>
+            <input hidden id="fens" type="text">
+            <button hidden onclick="client.connect(options);">1. Connect</button>
+            <button onclick="client.subscribe('fen', {qos: 2}); alert('Game Started');">Start Game</button>
+            <button onclick="getboard(); publish('fen',2);">Send Move</button>
+            <button onclick="reporter()">(4. Disconnect)</button>
+            <div id="messages" hidden></div>
+            <div id="pos" hidden></div>
+        </div>
     </div>
-    </div><br><br>
+    <br>
+    <br>
     <p>.....</p>
     <div class="split left">
-    <br>
-    <div>
-        
-        
-        <div>
-            <input type="file" id="loader">
-            <input type="button" value="Live" onclick="initx()">
-            <br><br>
-            
-            <input type="radio" name="gender" value="TL" id="tl">
-            <label id="_TL"> TL </label> &emsp;
-            <input type="text" id="TL_x" value="0">
-            <input type="text" id="TL_y" value="0">
-            
-
-            <input type="radio" name="gender" value="TR" id="tr">
-            <label id="_TR"> TR </label> &emsp;
-            <input type="text" id="TR_x" value="0">
-            <input type="text" id="TR_y" value="0">
-            <br>
-            <br>
-            <input type="radio" name="gender" value="BL" id="bl">
-            <label id="_BL"> BL </label> &emsp;
-            <input type="text" id="BL_x" value="0">
-            <input type="text" id="BL_y" value="0">
-            <input type="radio" name="gender" value="BR" id="br">
-            <label id="_BR"> BR </label> &emsp;
-            <input type="text" id="BR_x" value="0">
-            <input type="text" id="BR_y" value="0">
-            <br>
-            <br>
-            <button onclick="go()">Go</button>
-            <div class="controller">
-    <button id="snap">Capture</button><button onclick="go2()">Go Live</button>
-</div>
-            
-        </div>
-        <video id="video" playsinline autoplay ></video>
-        <canvas id="canvas" width=900 height=900 style="margin: 20px"></canvas>
-        <canvas id="canvas1" width=900 height=900></canvas>
         <br>
+        <div>
 
-    </div>
+            <div>
+                <input type="file" id="loader">
+                <input type="button" value="Live" onclick="initx()">
+                <br>
+                <br>
+
+                <input type="radio" name="gender" value="TL" id="tl">
+                <label id="_TL"> TL </label> &emsp;
+                <input type="text" id="TL_x" value="0">
+                <input type="text" id="TL_y" value="0">
+
+                <input type="radio" name="gender" value="TR" id="tr">
+                <label id="_TR"> TR </label> &emsp;
+                <input type="text" id="TR_x" value="0">
+                <input type="text" id="TR_y" value="0">
+                <br>
+                <br>
+                <input type="radio" name="gender" value="BL" id="bl">
+                <label id="_BL"> BL </label> &emsp;
+                <input type="text" id="BL_x" value="0">
+                <input type="text" id="BL_y" value="0">
+                <input type="radio" name="gender" value="BR" id="br">
+                <label id="_BR"> BR </label> &emsp;
+                <input type="text" id="BR_x" value="0">
+                <input type="text" id="BR_y" value="0">
+                <br>
+                <br>
+                <button onclick="go()">Go</button>
+                <div class="controller">
+                    <button id="snap">Capture</button>
+                    <button hidden onclick="go2()">Go Live</button>
+                </div>
+
+            </div>
+            <video id="video" playsinline autoplay></video>
+            <canvas id="canvas" width=900 height=900 style="margin: 20px"></canvas>
+            <canvas id="canvas1" width=900 height=900></canvas>
+            <br>
+
+        </div>
     </div>
     <script src="a.js" async defer></script>
     <script type="text/javascript" defer>
@@ -236,53 +248,93 @@ client.connect(options);
             // setanchors();
         }
     </script>
-    
-     <script type="text/javascript" async defer>
-    'use strict';
 
-const video = document.getElementById('video');
-const canvas2 = document.getElementById('canvas');
-const snap = document.getElementById("snap");
-const errorMsgElement = document.querySelector('span#errorMsg');
-var context = canvas2.getContext('2d');
-const constraints = {
-  audio: false,
-  video: {
-    width: 450, height: 450
-  }
-};
+    <script type="text/javascript" async defer>
+        'use strict';
 
-// Access webcam
-async function initx() {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia(constraints);
-    handleSuccess(stream);
-  } catch (e) {
-    errorMsgElement.innerHTML = `navigator.getUserMedia error:${e.toString()}`;
-  }
+        const video = document.getElementById('video');
+        const canvas2 = document.getElementById('canvas');
+        const snap = document.getElementById("snap");
+        const errorMsgElement = document.querySelector('span#errorMsg');
+        var context = canvas2.getContext('2d');
+        const constraints = {
+            audio: false,
+            video: {
+                width: 450,
+                height: 450
+            }
+        };
+
+        // Access webcam
+        async function initx() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                handleSuccess(stream);
+            } catch (e) {
+                errorMsgElement.innerHTML = `navigator.getUserMedia error:${e.toString()}`;
+            }
+        }
+
+        // Success
+        function handleSuccess(stream) {
+            window.stream = stream;
+            video.srcObject = stream;
+        }
+
+        // Load init
+
+        function go2() {
+
+            setanchors();
+            unwarp(anchors, unwarped, context);
+
+        }
+        // Draw image
+
+        snap.addEventListener("click", function() {
+
+            context.drawImage(video, 0, 0, 450, 450);
+            video.style.display = 'none';
+        });
+    </script>
+   <script type="text/javascript">
+    function reporter()
+       {
+           var x = JSON.parse(document.getElementById("pos").innerHTML);
+           x["move_number"] =  document.getElementById("mn").value.toString();
+           x["game_id"] = document.getElementById("gk").value.toString();
+           
+           //console.log(Object.keys(x))
+         /*  var a = Object.keys(x);
+           var b = Object.values(x);
+           
+           var form = new FormData();
+           for (var i=0; i<a.length; i++)
+               {
+                   form.append(a[i], b[i]);
+               }
+           
+           var settings = {
+  "async": true,
+  "crossDomain": true,
+  "url": "http://localhost:5000/add_actual_move",
+  "method": "POST",
+  "headers": {
+    "Content-Type": "application/x-www-form-urlencoded"
+  },
+  "processData": false,
+  "contentType": false,
+  "mimeType": "multipart/form-data",
+  "data": form
 }
 
-// Success
-function handleSuccess(stream) {
-  window.stream = stream;
-  video.srcObject = stream;
-}
-
-// Load init
-
-function go2(){
-    
-    setanchors();
-    unwarp(anchors,unwarped,context);
-    
-}
-// Draw image
-
-snap.addEventListener("click", function() {
-    
-	context.drawImage(video, 0, 0, 450, 450);
-    video.style.display = 'none';
-});
+$.ajax(settings).done(function (response) {
+  console.log(response);
+});*/
+           
+           const Url = "http://localhost:5000/add_actual_move"
+           $.post(Url, x, function(){console.log(`Sent:` + JSON.stringify(x))});
+       }
     </script>
 </body>
 
