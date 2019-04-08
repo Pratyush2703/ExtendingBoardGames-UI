@@ -8,6 +8,8 @@
         
         canvas {
             border: 0px solid red;
+            margin: 5px;
+            display: block;
         }
         
         .split {
@@ -17,19 +19,20 @@
             top: 0;
             overflow-x: hidden;
             padding-top: 20px;
+            text-align: center;
         }
         /* Control the left side */
         
         .left {
             left: 0;
-            width: 70%;
+            width: 55%;
             background-color: lightblue;
         }
         /* Control the right side */
         
         .right {
             right: 0;
-            width: 30%;
+            width: 45%;
             background-color: goldenrod;
         }
         /* If you want the content centered horizontally and vertically */
@@ -138,7 +141,10 @@
 
 <body id="body">
     <div class="split right">
-        <div id="board" style="width: 400px"></div>
+           <div>
+    <img src="player1.png" height="100px">
+    </div>
+        <div id="board" style="width: 400px;margin-left: 150px;"></div>
 
         <br>
         <div>
@@ -153,7 +159,7 @@
             <button hidden onclick="client.connect(options);">1. Connect</button>
             <button onclick="client.subscribe('fen', {qos: 2}); alert('Game Started');">Start Game</button>
             <button onclick="getboard(); publish('fen',2);">Send Move</button>
-            <button onclick="reporter()">Submit Errors</button>
+            <button onclick="reporter()">Submit Corrections</button>
             <div id="messages" hidden></div>
             <div id="pos" hidden></div>
         </div>
@@ -192,18 +198,19 @@
                 <input type="text" id="BR_y" value="0">
                 <br>
                 <br>
-                <button onclick="go()">Go</button>
                 <div class="controller">
+                    <button onclick="go()">Go</button>
                     <button id="snap">Capture</button>
                     <button hidden onclick="go2()">Go Live</button>
                 </div>
 
             </div>
-            <video id="video" playsinline autoplay></video>
-            <canvas id="canvas" width=900 height=900 style="margin: 20px"></canvas>
-            <canvas id="canvas1" width=900 height=900></canvas>
-            <br>
-
+            <div style = "text-align:center;">
+                <video id="video" playsinline autoplay height="0"></video>
+                <canvas id="canvas" width=450 height=450 style="margin: 20px, padding-left: 200px;padding-left: 200px;"></canvas>
+                <canvas id="canvas1" width=450 height=450 style="padding-left: 200px;"></canvas>
+            </div>
+            
         </div>
     </div>
     <script src="a.js" async defer></script>
@@ -305,7 +312,7 @@
     </script>
     <script type="text/javascript">
         function reporter() {
-            var x = JSON.parse(document.getElementById("pos").innerHTML);
+            var x = JSON.parse(document.getElementById("pos").innerHTML.toString());
             x["move_number"] = document.getElementById("mn").value.toString();
             x["game_id"] = document.getElementById("gk").value.toString();
 
@@ -338,8 +345,9 @@ $.ajax(settings).done(function (response) {
 });*/
 
             const Url = "http://localhost:5000/add_actual_move"
-            $.post(Url, x, function() {
-                console.log(`Sent:` + JSON.stringify(x))
+            $.post(Url, x, function(data) {
+                console.log(`Sent:` + JSON.stringify(x));
+                console.log(data);
             });
         }
     </script>

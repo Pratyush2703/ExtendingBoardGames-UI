@@ -10,9 +10,9 @@ var anchors={
 }
 var unwarped={
   TL:{x:0,y:0},       
-  TR:{x:900,y:0},     
-  BR:{x:900,y:900},   
-  BL:{x:0,y:900},     
+  TR:{x:450,y:0},     
+  BR:{x:450,y:450},   
+  BL:{x:0,y:450},     
 }
 
 var cfg = {
@@ -23,8 +23,8 @@ var cfg = {
 };
 var img = new Image;
 function start(){
-  cw=canvas.width=img.width;
-  ch=canvas.height=img.height;
+  cw=canvas.width=img.width/2;
+  ch=canvas.height=img.height/2;
   ctx.drawImage(img,0,0,img.width/2,img.height/2);
  
 }
