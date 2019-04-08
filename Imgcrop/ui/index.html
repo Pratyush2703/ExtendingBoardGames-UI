@@ -76,12 +76,18 @@
 
                 success: function(response) {
 
-                    alert("The server says: " + JSON.stringify(response));
+                    //alert("The server says: " + JSON.stringify(response));
                     var x = response.board;
 
                     // alert("The server says: " + JSON.stringify(response));
                     board.position(x[0]);
                     console.log(board.fen());
+                    console.log(response.rules_violated);
+                    console.log(response.rules_violated_details);
+                    if (response.rules_violated == true) {
+                        console.log("yup")
+                        alert("Error: " + response.rules_violated_details);
+                    }
 
                 }
             });
@@ -147,7 +153,7 @@
             <button hidden onclick="client.connect(options);">1. Connect</button>
             <button onclick="client.subscribe('fen', {qos: 2}); alert('Game Started');">Start Game</button>
             <button onclick="getboard(); publish('fen',2);">Send Move</button>
-            <button onclick="reporter()">(4. Disconnect)</button>
+            <button onclick="reporter()">Submit Errors</button>
             <div id="messages" hidden></div>
             <div id="pos" hidden></div>
         </div>
@@ -297,23 +303,22 @@
             video.style.display = 'none';
         });
     </script>
-   <script type="text/javascript">
-    function reporter()
-       {
-           var x = JSON.parse(document.getElementById("pos").innerHTML);
-           x["move_number"] =  document.getElementById("mn").value.toString();
-           x["game_id"] = document.getElementById("gk").value.toString();
-           
-           //console.log(Object.keys(x))
-         /*  var a = Object.keys(x);
+    <script type="text/javascript">
+        function reporter() {
+            var x = JSON.parse(document.getElementById("pos").innerHTML);
+            x["move_number"] = document.getElementById("mn").value.toString();
+            x["game_id"] = document.getElementById("gk").value.toString();
+
+            //console.log(Object.keys(x))
+            /*  var a = Object.keys(x);
            var b = Object.values(x);
-           
+
            var form = new FormData();
            for (var i=0; i<a.length; i++)
                {
                    form.append(a[i], b[i]);
                }
-           
+
            var settings = {
   "async": true,
   "crossDomain": true,
@@ -331,10 +336,12 @@
 $.ajax(settings).done(function (response) {
   console.log(response);
 });*/
-           
-           const Url = "http://localhost:5000/add_actual_move"
-           $.post(Url, x, function(){console.log(`Sent:` + JSON.stringify(x))});
-       }
+
+            const Url = "http://localhost:5000/add_actual_move"
+            $.post(Url, x, function() {
+                console.log(`Sent:` + JSON.stringify(x))
+            });
+        }
     </script>
 </body>
 
